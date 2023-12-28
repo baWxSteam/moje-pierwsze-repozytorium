@@ -1,1 +1,59 @@
-witojcie przyjaciele
+using UnityEngine;
+
+public class tp : MonoBehaviour
+{
+    public Transform startPoint; // Początkowy punkt
+    public Transform endPoint;   // Końcowy punkt
+    public float speed = 5.0f;   // Prędkość przemieszczania
+    public bool moveBack = true; // Czy obiekt ma wracać na początek
+
+    private Transform target;
+    private float journeyLength;
+    private float startTime;
+
+    void Start()
+    {
+        if (startPoint == null || endPoint == null)
+        {
+            Debug.LogError("Ustaw początkowy i końcowy punkt w inspektorze!");
+            enabled = false;
+            return;
+        }
+
+        target = endPoint;
+        transform.position = startPoint.position;
+        journeyLength = Vector3.Distance(startPoint.position, endPoint.position);
+        startTime = Time.time;
+    }
+
+    void Update()
+    {
+        float distanceCovered = (Time.time - startTime) * speed;
+        float journeyFraction = distanceCovered / journeyLength;
+
+        if (journeyFraction < 1.0f)
+        {
+            transform.position = Vector3.Lerp(startPoint.position, target.position, journeyFraction);
+        }
+        else
+        {
+            if (moveBack)
+            {
+                if (target == endPoint)
+                {
+                    target = startPoint;
+                }
+                else
+                {
+                    target = endPoint;
+                }
+
+                startTime = Time.time;
+            }
+            else
+            {
+                enabled = false; // Wyłącz skrypt, jeśli nie ma ruchu wstecz
+            }
+        }
+    }
+}
