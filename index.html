@@ -11,14 +11,6 @@ public class tp : MonoBehaviour
     private float journeyLength;
     private float startTime;
 
-    void Start()
-    {
-        if (startPoint == null || endPoint == null)
-        {
-            Debug.LogError("Ustaw początkowy i końcowy punkt w inspektorze!");
-            enabled = false;
-            return;
-        }
 
         target = endPoint;
         transform.position = startPoint.position;
